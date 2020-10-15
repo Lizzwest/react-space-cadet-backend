@@ -10,6 +10,7 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 // Mongoose connection object
+
 const db = mongoose.connection;
 
 // set up an event listener to fire once when the connections 'opens'
