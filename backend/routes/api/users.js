@@ -15,16 +15,21 @@ router.get('/test', (req, res) => {
 router.post('/register', (req, res) => {
 
   // Find user by email
-  db.User.findOne({ name: req.body.name })
+  db.user.find({name: req.body.name})
   .then(user => {
     // if email already exists, send a 400 response
     if (user) {
+
       return res.status(400).json({ msg: 'User Exists'});
     } else {
       // Create a new user
       const newUser = new User({
         name: req.body.name,
+        level:1,
       });
+      newUser.save()
+      .then(createdUser => res.json(createdUser))
+      .catch(error =>  console.log(error));
 
       // Salt and hash the password, then save the user
 
@@ -33,20 +38,20 @@ router.post('/register', (req, res) => {
 });
 
 // POST api/users/login (Public)
-router.post('/login', (req, res) => {
-  const name = req.body.name;
+// router.post('/login', (req, res) => {
+//   const name = req.body.name;
 
 
-  // Find a user via email
-  db.User.findOne({ name })
-  .then(user => {
-    if (!user) {
-      res.status(400).json({ msg: 'User not found'});
-    } else {
-      return res.status(400).json({ password: 'Name is incorrect' });
-    }
-  });
-});
+//   // Find a user via email
+//   db.User.findOne({ name })
+//   .then(user => {
+//     if (!user) {
+//       res.status(400).json({ msg: 'User not found'});
+//     } else {
+//       return res.status(400).json({ password: 'Name is incorrect' });
+//     }
+//   });
+// });
 
 // GET api/users/current (Private)
 // router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
